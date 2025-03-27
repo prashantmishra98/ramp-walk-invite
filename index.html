@@ -27,11 +27,11 @@
             border-radius: 20px;
             padding: 5vw;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            position: relative;
-            z-index: 10;
             text-align: center;
             transition: all 0.5s ease-in-out;
-            margin-top: 5vh; /* Add spacing from the top */
+            margin-top: 5vh; /* Adjusted to keep it at the top */
+            position: relative;
+            z-index: 10;
         }
 
         .message {
@@ -45,7 +45,7 @@
             justify-content: center;
             align-items: center;
             gap: 3vw;
-            position: relative; /* Ensure the buttons stay inside */
+            position: relative;
         }
 
         .next-btn, .yes, .no {
@@ -73,29 +73,29 @@
             background-color: #d3d3d3;
             color: black;
             display: none;
-            position: relative; /* Ensures it moves within the parent */
+            position: relative; /* Keeps movement inside container */
             transition: transform 0.5s ease-in-out, left 0.5s ease-in-out;
-            left: 0; /* Keep initial position */
+            left: 0;
         }
 
+        /* Confetti */
         .confetti {
             position: fixed;
-            width: 1vw;
-            height: 1vw;
-            background-color: #ff4081;
-            border-radius: 50%;
+            width: 10px;
+            height: 10px;
+            background-color: red;
             opacity: 1;
-            bottom: 0;
-            animation: rise 3s ease-out forwards;
+            border-radius: 50%;
+            animation: confetti-fall linear infinite;
         }
 
-        @keyframes rise {
+        @keyframes confetti-fall {
             0% {
-                transform: translateY(0);
+                transform: translateY(-10vh) rotate(0deg);
                 opacity: 1;
             }
             100% {
-                transform: translateY(-100vh);
+                transform: translateY(100vh) rotate(720deg);
                 opacity: 0;
             }
         }
@@ -142,7 +142,7 @@
 
         let size = 4; // vw
         let noClicks = 0;
-        let noMoveDistance = 0; // Tracks movement of 'No' button
+        let noMoveDistance = 0; // Controls 'No' button movement limit
 
         const messages = [
             "I have a small request... but first, let me say this. 😊",
@@ -207,7 +207,7 @@
             setTimeout(() => yesButton.style.transform = "scale(1)", 200);
 
             // Move "No" button within limits
-            if (noMoveDistance < 30) { // Adjust limit if needed
+            if (noMoveDistance < 30) { 
                 noMoveDistance += 5;
                 noButton.style.left = `${noMoveDistance}px`;
             }
@@ -227,6 +227,22 @@
 
             startConfetti();
         }
+
+        function startConfetti() {
+        setInterval(() => {
+            for (let i = 0; i < 15; i++) { // Increased number of confetti per batch
+                let confetti = document.createElement("div");
+                confetti.classList.add("confetti");
+                confetti.style.left = Math.random() * 100 + "vw";
+                confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                confetti.style.animationDuration = Math.random() * 3 + 2 + "s";
+                document.body.appendChild(confetti);
+
+                // Remove confetti after animation ends to prevent memory leak
+                setTimeout(() => confetti.remove(), 5000);
+            }
+        }, 500); // Generate new confetti every 0.5 seconds
+    }
     </script>
 </body>
 </html>
